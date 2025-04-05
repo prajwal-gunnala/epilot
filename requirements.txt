@@ -3,8 +3,6 @@ pandas
 numpy
 scikit-learn
 tensorflow
-keras
-shap
 matplotlib
 plotly
-pillow
+requests
