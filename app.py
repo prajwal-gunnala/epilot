@@ -2,21 +2,48 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
-from mpl_toolkits.mplot3d import Axes3D  # required for 3d plotting
-import os
-from sklearn.metrics import confusion_matrix, recall_score, accuracy_score
+from sklearn.metrics import recall_score, accuracy_score, confusion_matrix, ConfusionMatrixDisplay
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn import svm
 from sklearn.preprocessing import StandardScaler
-from keras.models import Sequential, model_from_json
-from keras.layers import Dense, Dropout, LSTM
-from keras.utils.np_utils import to_categorical
+from tensorflow.keras.models import Sequential, model_from_json
+from tensorflow.keras.layers import Dense, Dropout, LSTM
+from tensorflow.keras.utils import to_categorical
+import os
 import shap
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+import tempfile
+import tensorflow as tf
 
+# Page configuration
+st.set_page_config(
+    page_title="E-Pilots: Hard Landing Prediction",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Session state initialization
+if 'pilot' not in st.session_state:
+    st.session_state.pilot = None
+    st.session_state.actuator = None
+    st.session_state.physical = None
+    st.session_state.Y = None
+    st.session_state.all_data = None
+    st.session_state.models_trained = False
+    st.session_state.sensitivity = []
+    st.session_state.specificity = []
+
+# Title and description
+st.title("✈️ E-Pilots: Hard Landing Prediction System")
+st.markdown("""
+Predicts hard landings using pilot, actuator, and physical data during the approach phase of commercial flights.
+""")
+
+# Rest of your code continues exactly as before...
 # Set the page configuration
-st.set_page_config(page_title="E-Pilots: Flight Landing Prediction", layout="wide")
+
 
 # Initialize session state variables
 if 'pilot' not in st.session_state:
